@@ -12,6 +12,8 @@
         canvas.height = win_height * dips;
         canvas.style.width = win_width + 'px';
         canvas.style.height = win_height + 'px';
+
+        console.log('canvas size is', canvas.width, 'x', canvas.height, 'px');
     }
 
     function init() {
@@ -33,12 +35,12 @@
 
     function loop() {
         loop.run();
-        if (stats) {
-            stats.begin();
-        }
         if (shouldResize) {
             resize();
             shouldResize = false;
+        }
+        if (stats) {
+            stats.begin();
         }
         idle();
         if (stats) {
