@@ -18,12 +18,17 @@
 
     function init() {
         canvas = document.createElement('canvas');
+        canvas.screencanvas = true;  // => CocoonJS
         ctx = canvas.getContext('2d');
+
         resize();
         document.body.appendChild(canvas);
-        window.addEventListener('resize', function(){ shouldResize = true; });
 
-        if (!navigator.isCocoonJS) {
+        window.addEventListener('resize', function(){
+            shouldResize = true;
+        });
+
+        if (!navigator.isCocoonJS) {  // => CocoonJS
             stats = new Stats();
             stats.setMode(0);
             stats.domElement.style.position = "absolute";
