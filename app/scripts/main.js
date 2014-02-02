@@ -39,7 +39,7 @@
     }
 
     function loop() {
-        loop.run();
+        loop.start();
         if (shouldResize) {
             resize();
             shouldResize = false;
@@ -53,7 +53,7 @@
         }
     }
 
-    loop.run = function() {
+    loop.start = function() {
         window.requestAnimationFrame(loop);
     };
 
@@ -72,6 +72,6 @@
     }
 
     init();
-    loop.run();
+    loop.start();
 
 })();
