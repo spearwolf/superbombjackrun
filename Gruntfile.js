@@ -7,6 +7,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jade');
+    grunt.loadNpmTasks('grunt-gh-pages');
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -71,12 +72,20 @@ module.exports = function(grunt) {
                     "public/index.html": ["app/views/index.jade"]
                 }
             }
+        },
+
+        'gh-pages': {
+            options: {
+                base: 'public'
+            },
+            src: '**/*'
         }
 
     });
 
     grunt.registerTask('build', ['browserify', 'uglify', 'less', 'jade']);
     grunt.registerTask('serve', ['connect', 'watch']);
+    grunt.registerTask('publish', ['build', 'gh-pages']);
 
     grunt.registerTask('default', 'serve');
 };
