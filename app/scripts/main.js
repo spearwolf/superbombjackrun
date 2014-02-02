@@ -57,7 +57,7 @@
         window.requestAnimationFrame(loop);
     };
 
-    function clear() {
+    function clearBackground() {
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -65,7 +65,7 @@
     }
 
     function idle() {
-        clear();
+        clearBackground();
 
         ctx.fillStyle = "rgb(255,0,128)";
         ctx.fillRect(0, 0, canvas.width>>1, canvas.height>>1);
