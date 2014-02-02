@@ -8,12 +8,15 @@
           , win_height = window.innerHeight
           , dips = window.devicePixelRatio
           ;
-        canvas.width = win_width * dips;
-        canvas.height = win_height * dips;
-        canvas.style.width = win_width + 'px';
-        canvas.style.height = win_height + 'px';
 
-        console.log('canvas size is', canvas.width, 'x', canvas.height, 'px');
+        if (canvas.width !== (win_width * dips) || canvas.height !== (win_height * dips)) {
+            canvas.width = win_width * dips;
+            canvas.height = win_height * dips;
+            canvas.style.width = win_width + 'px';
+            canvas.style.height = win_height + 'px';
+
+            console.log('canvas size is', canvas.width, 'x', canvas.height, 'px');
+        }
     }
 
     function init() {
