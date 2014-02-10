@@ -10,16 +10,15 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-gh-pages');
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
 
         clean: ["public/js/app.min.js", "public/css/app.css", "public/index.html", ".tmp"],
 
         browserify: {
             dist: {
-                files: {
-                    '.tmp/scripts/app.js': [
-                        'app/scripts/*.js'
-                    ] //, 'app/scripts/app/**/*.js']
+                src: [ 'app/scripts/**/*.js', 'app/scripts/**/*.coffee' ],
+                dest: '.tmp/scripts/app.js',
+                options: {
+                    transform: ['coffeeify']
                 }
             }
         },
@@ -29,7 +28,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'public/js/app.min.js': ['app/scripts/vendor/*.js', '.tmp/scripts/app.js']
+                    'public/js/app.min.js': ['app/vendor/scripts/*.js', '.tmp/scripts/app.js']
                 }
             }
         },

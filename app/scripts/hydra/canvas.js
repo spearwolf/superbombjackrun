@@ -5,6 +5,9 @@
       , $h = hydra.context()
       ;
 
+    hydra.BasicCanvas = require('./basic_canvas.coffee');
+    hydra.CanvasGrid = require('./canvas_grid.coffee');
+
     hydra.context('clearBackground', function() {
         $h.ctx.save();
         $h.ctx.setTransform(1, 0, 0, 1, 0, 0);
