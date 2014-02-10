@@ -64,16 +64,14 @@ module.exports.CanvasGrid = class CanvasGrid
 
     _grid: (gx, gy) -> @grid[(gy * @gridWidth) + gx]
 
-    # canvasGrid.tileProps[y][x].grid.canvas.ctx
-    #
-    getCanvas: (tx, ty) -> @tileProps[ty][tx].grid.canvas
+    getCanvas: (tx, ty) -> @tileProps[ty][tx].grid.canvas  # => canvasGrid.tileProps[y][x].grid.canvas.ctx
 
     getGrid: (x, y) -> @_grid((x/@gridPixelSize)|0, (y/@gridPixelSize)|0)
 
-    renderTile: (x, y, tileCanvas, tileX, tileY) ->
-        grid = @tileProps[y][x].grid
-        grid.canvas.ctx.drawImage tileCanvas, tileX, tileY, @tileSize,
-                                    (x * @tileSize) - grid.x0, (y * @tileSize) - grid.y0,
+    renderTile: (tx, ty, tileCanvas, tileX, tileY) ->
+        grid = @tileProps[ty][tx].grid
+        grid.canvas.ctx.drawImage tileCanvas, tileX, tileY, @tileSize, @tileSize
+                                    (tx * @tileSize) - grid.x0, (ty * @tileSize) - grid.y0,
                                         @tileSize, @tileSize
 
     renderTo: (canvas, x, y, width, height) ->
