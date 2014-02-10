@@ -70,6 +70,12 @@ module.exports.CanvasGrid = class CanvasGrid
 
     getGrid: (x, y) -> @_grid((x/@gridPixelSize)|0, (y/@gridPixelSize)|0)
 
+    renderTile: (x, y, tileCanvas, tileX, tileY) ->
+        grid = @tileProps[y][x].grid
+        grid.canvas.ctx.drawImage tileCanvas, tileX, tileY, @tileSize,
+                                    (x * @tileSize) - grid.x0, (y * @tileSize) - grid.y0,
+                                        @tileSize, @tileSize
+
     renderTo: (canvas, x, y, width, height) ->
         upperLeftGrid = @getGrid(x,  y)
         bottomRightGrid = @getGrid(x + width - 1, y + height - 1)
