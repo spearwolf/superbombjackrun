@@ -39,7 +39,7 @@
         }
     };
 
-    hydra.createCanvas = function(canvasContext) {
+    hydra.createMainCanvas = function(canvasContext) {
 
         var canvas = $h.canvas = document.createElement('canvas');
         if (navigator.isCocoonJS && canvasContext === '2d') {
@@ -54,7 +54,9 @@
         window.addEventListener('resize', function(){
             $h.shouldResize = true;
         });
+    };
 
+    hydra.createStatsWidget = function() {
         if (!navigator.isCocoonJS) {  // => CocoonJS
             var stats = $h.stats = new Stats();
             stats.setMode(0);

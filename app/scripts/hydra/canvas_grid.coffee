@@ -6,6 +6,7 @@ MAX_GRID_CANVAS_SIZE = 1024
 module.exports.CanvasGrid = class CanvasGrid
 
     constructor: (@width, @height, @tileSize, @maxGridCanvasSize = MAX_GRID_CANVAS_SIZE) ->
+
         maxCanvasTileSize = (@maxGridCanvasSize / @tileSize)|0
         @gridWidth = Math.ceil(@width / maxCanvasTileSize)|0
         @gridHeight = Math.ceil(@height / maxCanvasTileSize)|0
@@ -13,7 +14,6 @@ module.exports.CanvasGrid = class CanvasGrid
         gridTileSizeLastX = @width - ((@gridWidth - 1) * maxCanvasTileSize)
         gridTileSizeLastY = @height - ((@gridHeight - 1) * maxCanvasTileSize)
 
-        #console.info "maxCanvasTileSize:#{maxCanvasTileSize} gridSize:[#{@gridWidth}, #{@gridHeight}] gridPixelSize:#{@gridPixelSize}, canvasTileSizeLast: [#{gridTileSizeLastX}, #{gridTileSizeLastY}]"
 
         # Build canvas grid
         # =================================================================
@@ -45,6 +45,7 @@ module.exports.CanvasGrid = class CanvasGrid
                 #console.debug "CanvasGrid.grid[#{i}]: (#{x}, #{y}) ->", @grid[i]
             y0 += h
 
+
         # Generate properties for all tiles
         # =================================================================
 
@@ -62,15 +63,23 @@ module.exports.CanvasGrid = class CanvasGrid
                     x: x * @tileSize
                     y: y * @tileSize
 
+
+    # Helper
+    # =================================================================
+
     _grid: (gx, gy) -> @grid[(gy * @gridWidth) + gx]
 
     getCanvas: (tx, ty) -> @tileProps[ty][tx].grid.canvas  # => canvasGrid.tileProps[y][x].grid.canvas.ctx
 
     getGrid: (x, y) -> @_grid((x/@gridPixelSize)|0, (y/@gridPixelSize)|0)
 
+
+    # Render
+    # =================================================================
+
     renderTile: (tx, ty, tileCanvas, tileX, tileY) ->
         grid = @tileProps[ty][tx].grid
-        grid.canvas.ctx.drawImage tileCanvas, tileX, tileY, @tileSize, @tileSize
+        grid.canvas.ctx.drawImage tileCanvas, tileX, tileY, @tileSize, @tileSize,
                                     (tx * @tileSize) - grid.x0, (ty * @tileSize) - grid.y0,
                                         @tileSize, @tileSize
 

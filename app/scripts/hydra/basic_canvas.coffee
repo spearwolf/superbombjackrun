@@ -14,8 +14,10 @@ module.exports = class BasicCanvas
     setSize: (@width, @height) ->
         @canvas.width = @width
         @canvas.height = @height
-        if @width > 2048 and @height > 2048
-            console.warn "canvas size of #{@width}x#{@height} might be too big for mobile devices!"
+        mp = @width * @height
+        if mp > 5000000
+            mp = Math.round(mp * 10) / 10.0
+            console.log "WARN canvas size of #{@width}x#{@height} ~#{mp}MP might be too big for mobile devices!"
 
     appendTo: (@parent) ->
         @parent = document.getElementById(@parent) if typeof @parent is 'string'

@@ -12,13 +12,12 @@
             hydra.resize();
             $h.shouldResize = false;
         }
-        if ($h.stats) {
-            $h.stats.begin();
-        }
+
+        if ($h.stats) $h.stats.begin();
+
         hydra.emit('idle');
-        if ($h.stats) {
-            $h.stats.end();
-        }
+
+        if ($h.stats) $h.stats.end();
     }
 
     hydra.loop.run = function() {
@@ -26,8 +25,12 @@
     };
 
     hydra.run2d = function() {
-        hydra.createCanvas('2d');
+
+        hydra.createMainCanvas('2d');
+        hydra.createStatsWidget();
+
         hydra.emit('init');
+
         hydra.loop.run();
     };
 

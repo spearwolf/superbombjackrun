@@ -62,9 +62,11 @@
     };
 
     api.apply = function(callback, args) {
+
         if (args && args.length === 0) {
             args = undefined;
         }
+
         if (typeof callback === 'function') {
             callback.apply(context, args);
 
