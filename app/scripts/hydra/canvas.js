@@ -6,7 +6,10 @@
       ;
 
     hydra.BasicCanvas = require('./basic_canvas.coffee');
+    hydra.BasicCanvas.fromImage = require('./basic_canvas_from_image');
+
     hydra.CanvasGrid = require('./canvas_grid.coffee');
+
 
     hydra.context('clearBackground', function() {
         $h.ctx.save();

@@ -9,7 +9,6 @@ module.exports = class BasicCanvas
             @setSize @options.width, @options.height
 
         @appendTo(@options.appendTo) if @options.appendTo?
-        @fromImage(@options.fromImage) if typeof @options.fromImage is 'string'
 
     setSize: (@width, @height) ->
         @canvas.width = @width
@@ -25,15 +24,11 @@ module.exports = class BasicCanvas
         unless @width? and @height?
             [@width, @height] = [@canvas.width, @canvas.height]
 
-    fromImage: (@imageUrl) ->
-        @image = new Image
-        @image.onload = =>
-            @setSize @image.width, @image.height
-            @ctx.drawImage @image, 0, 0, @width, @height
-            if typeof @options.onLoad is 'function'
-                @options.onLoad.call this
-        @image.src = @imageUrl
-
     fillRect: -> @ctx.fillRect 0, 0, @width, @height
 
+    imageData: (pixelData) ->
+        if pixelData
+            @ctx.putImageData pixelData, 0, 0
+        else
+            @ctx.getImageData 0, 0, @width, @height
 
