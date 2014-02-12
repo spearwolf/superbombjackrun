@@ -3,7 +3,7 @@
 
     var callbacks = { _id: 0 }
       , context = {}
-      , services = {}
+      , serviceInstances = {}
       ;
 
     api.on = function(eventName, prio, fn) {
@@ -47,13 +47,13 @@
                 api.apply(cb.fn, args);
             });
         }
-    }
+    };
 
     api.context = function(name, value) {
         if (arguments.length === 2) {
 
             if (value instanceof Array && typeof value[value.length - 1] === 'function') {
-                context[name] = function() {
+                context[name] = function() {
                     return api.apply(value, arguments);
                 };
             } else {
@@ -78,16 +78,24 @@
             return callback.apply(ctx, args);
 
         } else if (callback.length) {
-            var args0 = [], _arg, service;
+            var args0 = []
+              , _arg
+              , service
+              , key
+              ;
             for (var i= 0; i < callback.length; i++) {
                 if (i < callback.length - 1) {
 
-                    if (callback[i] === '$h') {
+                    key = callback[i];
+
+                    if (key === '$h') {
                         _arg = context;
-                    } else if (!!(service = services[callback[i]])) {
+
+                    } else if (!!(service = serviceInstances[key])) {
                         _arg = service;
+
                     } else {
-                        _arg = ctx[callback[i]];
+                        _arg = ctx[key];
                     }
 
                     args0.push(_arg);
@@ -107,12 +115,12 @@
         var ctx = Object.create(context);
         callback.$h = ctx;
 
-        var service = {
+        var instance = {
             name: name,
             context: ctx,
             api: api.run(callback)
         }
-        return services[name] = service;
+        return serviceInstances[name] = instance;
     };
 
 
