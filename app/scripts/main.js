@@ -7,8 +7,9 @@
         console.log('canvas size => ['+w+'x'+h+']');
     });
 
+    /*
     hydra.on('resize', ['clearBackground', 'ctx', function(clearBg, ctx, width, height){
-        clearBg();
+        //clearBg();
 
         //var hW = width>>1
           //, hH = height>>1
@@ -20,12 +21,18 @@
         //ctx.fillStyle = "rgb(128,0,255)";
         //ctx.fillRect(hW, hH, hW, hH);
     }]);
-
+    */
 
     hydra.BasicCanvas.fromImage('images/tileset1.png', 6).then(function(tileset){
 
-        hydra.on('idle', ['ctx', function(ctx) {
-            ctx.drawImage(tileset.canvas, 200, 100, tileset.width, tileset.height);
+        hydra.on('idle', ['ctx', 'width', 'height', 'clearBackground', function(ctx, w, h, clearBg) {
+            clearBg();
+            ctx.drawImage(
+                tileset.canvas,
+                (w - tileset.width)>>1,
+                (h - tileset.height)>>1,
+                tileset.width,
+                tileset.height);
         }]);
 
         hydra.run2d();
