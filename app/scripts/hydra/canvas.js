@@ -11,34 +11,40 @@
     hydra.CanvasGrid = require('./canvas_grid.coffee');
 
 
-    hydra.context('clearBackground', function() {
-        $h.ctx.save();
-        $h.ctx.setTransform(1, 0, 0, 1, 0, 0);
-        $h.ctx.clearRect(0, 0, $h.canvas.width, $h.canvas.height);
-        $h.ctx.restore();
-    });
+    hydra.context('clearBackground', ['ctx', 'width', 'height', function(ctx, w, h) {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+        ctx.restore();
+    }]);
+
+    //hydra.context('clearBackground', function() {
+        //$h.ctx.save();
+        //$h.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        //$h.ctx.clearRect(0, 0, $h.canvas.width, $h.canvas.height);
+        //$h.ctx.restore();
+    //});
 
     hydra.resize = function() {
 
         var win_width = window.innerWidth
           , win_height = window.innerHeight
           , pixel_ratio = window.devicePixelRatio || 1
+          , pixel_width = win_width * pixel_ratio
+          , pixel_height = win_height * pixel_ratio
           ;
 
         $h.devicePixelRatio = pixel_ratio;
 
-        if ($h.canvas.width !== (win_width * pixel_ratio) ||
-                $h.canvas.height !== (win_height * pixel_ratio)) {
+        if ($h.canvas.width !== pixel_width || $h.canvas.height !== pixel_height) {
 
-            $h.width = win_width * pixel_ratio;
-            $h.height = win_height * pixel_ratio;
+            $h.width = $h.canvas.width = pixel_width;
+            $h.height = $h.canvas.height = pixel_height;
 
-            $h.canvas.width = $h.width;
-            $h.canvas.height = $h.height;
             $h.canvas.style.width = win_width + 'px';
             $h.canvas.style.height = win_height + 'px';
 
-            hydra.emit('resize', $h.width, $h.height);
+            hydra.emit('resize', pixel_width, pixel_height);
         }
     };
 

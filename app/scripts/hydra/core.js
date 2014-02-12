@@ -3,6 +3,7 @@
 
     var callbacks = { _id: 0 }
       , context = {}
+      , services = {}
       ;
 
     api.on = function(eventName, prio, fn) {
@@ -20,8 +21,6 @@
         eventListener.sort(function(a,b){
             return b.prio - a.prio;
         });
-
-        //console.log(eventName, eventListener);
 
         return fnId;
     };
@@ -45,7 +44,6 @@
         var args = Array.prototype.slice.call(arguments, 1);
         if (eventName in callbacks) {
             callbacks[eventName].forEach(function(cb){
-                //cb.fn.apply(context, args);
                 api.apply(cb.fn, args);
             });
         }
@@ -53,7 +51,15 @@
 
     api.context = function(name, value) {
         if (arguments.length === 2) {
-            context[name] = value;
+
+            if (value instanceof Array && typeof value[value.length - 1] === 'function') {
+                context[name] = function() {
+                    return api.apply(value, arguments);
+                };
+            } else {
+                context[name] = value;
+            }
+
         } else if (arguments.length === 1) {
             return context[name];
         } else {
@@ -62,33 +68,51 @@
     };
 
     api.apply = function(callback, args) {
+        var ctx = callback.$h || context;
 
         if (args && args.length === 0) {
             args = undefined;
         }
 
         if (typeof callback === 'function') {
-            callback.apply(context, args);
+            return callback.apply(ctx, args);
 
         } else if (callback.length) {
-            var args0 = [], _arg;
+            var args0 = [], _arg, service;
             for (var i= 0; i < callback.length; i++) {
                 if (i < callback.length - 1) {
+
                     if (callback[i] === '$h') {
                         _arg = context;
+                    } else if (!!(service = services[callback[i]])) {
+                        _arg = service;
                     } else {
-                        _arg = context[callback[i]];
+                        _arg = ctx[callback[i]];
                     }
+
                     args0.push(_arg);
+
                 } else {
-                    callback[i].apply(context, args ? args0.concat(args) : args0);
+                    return callback[i].apply(ctx, args ? args0.concat(args) : args0);
                 }
             }
         }
     };
 
-    api.call = function(callback) {
-        api.apply(callback, Array.prototype.slice.call(arguments, 1));
+    api.run = function(callback) {
+        return api.apply(callback, Array.prototype.slice.call(arguments, 1));
+    };
+
+    api.factory = function(name, callback) {
+        var ctx = Object.create(context);
+        callback.$h = ctx;
+
+        var service = {
+            name: name,
+            context: ctx,
+            api: api.run(callback)
+        }
+        return services[name] = service;
     };
 
 
