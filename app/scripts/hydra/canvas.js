@@ -11,19 +11,22 @@
     hydra.CanvasGrid = require('./canvas_grid.coffee');
 
 
-    hydra.context('clearBackground', ['ctx', 'width', 'height', function(ctx, w, h) {
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.clearRect(0, 0, w, h);
-        ctx.restore();
-    }]);
+    //hydra.context('clearBackground', ['ctx', 'width', 'height', function(ctx, w, h) {
+        //ctx.save();
+        //ctx.setTransform(1, 0, 0, 1, 0, 0);
+        //ctx.clearRect(0, 0, w, h);
+        //ctx.restore();
+    //}]);
 
-    //hydra.context('clearBackground', function() {
-        //$h.ctx.save();
-        //$h.ctx.setTransform(1, 0, 0, 1, 0, 0);
-        //$h.ctx.clearRect(0, 0, $h.canvas.width, $h.canvas.height);
-        //$h.ctx.restore();
-    //});
+    hydra.factory('clearBackground', function() {
+        return function() {
+            this.ctx.save();
+            this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+            this.ctx.clearRect(0, 0, this.width, this.height);
+            this.ctx.restore();
+        };
+    });
+
 
     hydra.resize = function() {
 

@@ -67,6 +67,20 @@
         }
     };
 
+    api.get = function(key, ctx) {
+        var service;
+
+        if (key === '$h') {
+            return context;
+
+        } else if (!!(service = serviceInstances[key])) {
+            return service.api;
+
+        } else {
+            return (ctx || context)[key];
+        }
+    };
+
     api.apply = function(callback, args) {
         var ctx = callback.$h || context;
 
@@ -79,27 +93,11 @@
 
         } else if (callback.length) {
             var args0 = []
-              , _arg
               , service
-              , key
               ;
             for (var i= 0; i < callback.length; i++) {
                 if (i < callback.length - 1) {
-
-                    key = callback[i];
-
-                    if (key === '$h') {
-                        _arg = context;
-
-                    } else if (!!(service = serviceInstances[key])) {
-                        _arg = service;
-
-                    } else {
-                        _arg = ctx[key];
-                    }
-
-                    args0.push(_arg);
-
+                    args0.push(api.get(callback[i], ctx));
                 } else {
                     return callback[i].apply(ctx, args ? args0.concat(args) : args0);
                 }
@@ -120,6 +118,12 @@
             context: ctx,
             api: api.run(callback)
         }
+
+        instance.isFunction = typeof instance.api === 'function';
+        if (instance.isFunction) {
+            instance.api = instance.api.bind(instance.context);
+        }
+
         return serviceInstances[name] = instance;
     };
 

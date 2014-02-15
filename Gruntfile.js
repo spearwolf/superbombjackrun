@@ -8,10 +8,21 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jade');
     grunt.loadNpmTasks('grunt-gh-pages');
+    grunt.loadNpmTasks('grunt-exec');
+    grunt.loadTasks('./tasks');
 
     grunt.initConfig({
 
         clean: ["public/js/app.min.js", "public/css/app.css", "public/index.html", ".tmp"],
+
+        texturepacker: {
+            dist: {
+                targetdir: 'public/assets/gfx',
+                dirs: [
+                    'app/assets/gfx/tileset1'
+                ]
+            }
+        },
 
         browserify: {
             dist: {
@@ -84,7 +95,7 @@ module.exports = function(grunt) {
 
     });
 
-    grunt.registerTask('build', ['browserify', 'uglify', 'less', 'jade']);
+    grunt.registerTask('build', ['texturepacker', 'browserify', 'uglify', 'less', 'jade']);
     grunt.registerTask('serve', ['connect', 'watch']);
     grunt.registerTask('publish', ['build', 'gh-pages']);
 
