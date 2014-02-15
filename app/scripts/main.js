@@ -23,19 +23,27 @@
     }]);
     */
 
-    hydra.BasicCanvas.fromImage('images/tileset1.png', 6).then(function(tileset){
+    hydra.on('init', ['assetsManager', function($am){
 
-        hydra.on('idle', ['ctx', 'width', 'height', 'clearBackground', function(ctx, w, h, clearBg) {
-            clearBg();
-            ctx.drawImage(
-                tileset.canvas,
-                (w - tileset.width)>>1,
-                (h - tileset.height)>>1,
-                tileset.width,
-                tileset.height);
-        }]);
+        $am.addImage('assets/gfx/tileset10.png', 6, 'tileset1');
+        $am.addImage('images/tileset1.png', 6);
 
-        hydra.run2d();
-    });
+    }]);
+
+    hydra.on('idle', ['ctx', 'width', 'height', 'clearBackground', 'assetsManager', function(ctx, w, h, clearBg, $am) {
+
+        var tileset = $am.get('tileset1');
+
+        clearBg();
+
+        ctx.drawImage(
+            tileset.canvas,
+            (w - tileset.width)>>1,
+            (h - tileset.height)>>1,
+            tileset.width,
+            tileset.height);
+    }]);
+
+    hydra.run2d();
 
 })();

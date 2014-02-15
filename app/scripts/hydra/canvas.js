@@ -11,13 +11,6 @@
     hydra.CanvasGrid = require('./canvas_grid.coffee');
 
 
-    //hydra.context('clearBackground', ['ctx', 'width', 'height', function(ctx, w, h) {
-        //ctx.save();
-        //ctx.setTransform(1, 0, 0, 1, 0, 0);
-        //ctx.clearRect(0, 0, w, h);
-        //ctx.restore();
-    //}]);
-
     hydra.factory('clearBackground', function() {
         return function() {
             this.ctx.save();

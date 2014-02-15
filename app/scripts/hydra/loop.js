@@ -31,7 +31,14 @@
 
         hydra.emit('init');
 
-        hydra.loop.run();
+        var $am = hydra.get('assetsManager');
+        if ($am) {
+            $am.waitForAll().then(function(){
+                hydra.loop.run();
+            });
+        } else {
+            hydra.loop.run();
+        }
     };
 
 })(module.exports);

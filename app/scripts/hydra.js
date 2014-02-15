@@ -5,5 +5,6 @@
 
     require('./hydra/canvas');
     require('./hydra/loop');
+    require('./hydra/assets_manager');
 
 })();
