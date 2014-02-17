@@ -3,6 +3,7 @@
 
     var hydra = require('./core')
       , BasicCanvas = require('./basic_canvas.coffee')
+      , canvasUtils = require('./canvas_utils.js')
       ;
 
     function AssetManagerException(message) {
@@ -10,40 +11,40 @@
         this.name = 'AssetManagerException';
     }
 
-    hydra.factory('assetsManager', ['$h', function($h){
+    hydra.factory('assetsManager', function(){
 
-        var api = {
-            $image: {}
+        var assets = {
+            image: {}
         };
 
-        api.addImage = function(path, pixelZoom, name) {
+        assets.addImage = function(path, pixelZoom, name) {
             var _name = name || path;
-            if (api.$image[_name]) {
+            if (assets.image[_name]) {
                 throw new AssetManagerException('image already exists! name=' + _name);
             }
-            api.$image[_name] = {
+            assets.image[_name] = {
                 promise: BasicCanvas.fromImage(path, pixelZoom)
             };
-            api.$image[_name].promise.then(function(basicCanvas) {
-                api.$image[_name] = basicCanvas;
+            assets.image[_name].promise.then(function(basicCanvas) {
+                assets.image[_name] = canvasUtils.extend(basicCanvas);
                 console.log('AssetManager', 'image loaded, name=', _name, 'path=', path, 'data=', basicCanvas);
             });
         };
 
-        api.waitForAll = function(){
-            var all = Object.keys(api.$image).map(function(name){
-                return api.$image[name].promise;
+        assets.waitForAll = function(){
+            var all = Object.keys(assets.image).map(function(name){
+                return assets.image[name].promise;
             }).filter(function(p){
                 return !!p;
             });
             return Q.all(all);
         };
 
-        api.get = function(name) {
-            return api.$image[name];
+        assets.get = function(name) {
+            return assets.image[name];
         };
 
-        return api;
-    }]);
+        return assets;
+    });
 
 })(module.exports);

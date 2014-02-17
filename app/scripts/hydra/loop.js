@@ -1,44 +1,37 @@
 (function(api){
     "use strict";
 
-    var hydra = require('./core')
-      , $h = hydra.context()
-      ;
+    var hydra = require('./core');
 
     hydra.loop = function() {
+        var ctx = hydra.context();
+
         hydra.loop.run();
 
-        if ($h.shouldResize) {
+        if (ctx.shouldResize) {
             hydra.resize();
-            $h.shouldResize = false;
+            ctx.shouldResize = false;
         }
 
-        if ($h.stats) $h.stats.begin();
-
+        ctx.try('stats', 'begin');
         hydra.emit('idle');
-
-        if ($h.stats) $h.stats.end();
+        ctx.try('stats', 'end');
     }
 
     hydra.loop.run = function() {
         window.requestAnimationFrame(hydra.loop);
     };
 
-    hydra.run2d = function() {
+    hydra.start = function() {
 
         hydra.createMainCanvas('2d');
         hydra.createStatsWidget();
 
         hydra.emit('init');
 
-        var $am = hydra.get('assetsManager');
-        if ($am) {
-            $am.waitForAll().then(function(){
-                hydra.loop.run();
-            });
-        } else {
+        hydra.get('assetsManager').waitForAll().then(function(){
             hydra.loop.run();
-        }
+        });
     };
 
 })(module.exports);

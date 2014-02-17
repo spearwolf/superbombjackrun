@@ -6,6 +6,18 @@
       , serviceInstances = {}
       ;
 
+
+    context.try = function(key, name) {
+        if (context[key]) {
+            if (typeof context[key][name] === 'function') {
+                return context[key][name]();
+            }
+            return context[key][name];
+        }
+        return;
+    };
+
+
     api.on = function(eventName, prio, fn) {
 
         if (arguments.length === 2) {
