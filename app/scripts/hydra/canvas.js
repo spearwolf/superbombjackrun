@@ -21,7 +21,7 @@
     });
 
 
-    hydra.resize = function() {
+    hydra.resizeCanvas = function() {
 
         var win_width = window.innerWidth
           , win_height = window.innerHeight
@@ -53,7 +53,7 @@
 
         var ctx = $h.ctx = canvas.getContext(canvasContext);
 
-        hydra.resize();
+        hydra.resizeCanvas();
         document.body.appendChild(canvas);
 
         window.addEventListener('resize', function(){

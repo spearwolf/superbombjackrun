@@ -9,7 +9,7 @@
         hydra.loop.run();
 
         if (ctx.shouldResize) {
-            hydra.resize();
+            hydra.resizeCanvas();
             ctx.shouldResize = false;
         }
 

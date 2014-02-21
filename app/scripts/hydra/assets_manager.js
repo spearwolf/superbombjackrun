@@ -40,7 +40,7 @@
             return Q.all(all);
         };
 
-        assets.get = function(name) {
+        assets.getImage = function(name) {
             return assets.image[name];
         };
 
