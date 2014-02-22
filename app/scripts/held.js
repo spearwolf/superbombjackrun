@@ -1,11 +1,11 @@
 (function(){
     "use strict";
 
-    module.exports = require('./hydra/core');
+    module.exports = require('./held/core');
 
-    require('./hydra/canvas');
-    require('./hydra/loop');
-    require('./hydra/assets_manager');
+    require('./held/canvas');
+    require('./held/loop');
+    require('./held/assets_manager');
 
     // shortcuts
     module.exports.init = function() { return module.exports.on('init', arguments[0]); };

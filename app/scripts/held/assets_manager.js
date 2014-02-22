@@ -1,7 +1,7 @@
 (function(api){
     "use strict";
 
-    var hydra = require('./core')
+    var held = require('./core')
       , BasicCanvas = require('./basic_canvas.coffee')
       , canvasUtils = require('./canvas_utils.js')
       ;
@@ -11,7 +11,7 @@
         this.name = 'AssetManagerException';
     }
 
-    hydra.factory('assetsManager', function(){
+    held.factory('assetsManager', function(){
 
         var assets = {
             image: {}

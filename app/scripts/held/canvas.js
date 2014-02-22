@@ -1,17 +1,17 @@
 (function(api){
     "use strict";
 
-    var hydra = require('./core')
-      , $h = hydra.context()
+    var held = require('./core')
+      , $h = held.context()
       ;
 
-    hydra.BasicCanvas = require('./basic_canvas.coffee');
-    hydra.BasicCanvas.fromImage = require('./basic_canvas_from_image');
+    held.BasicCanvas = require('./basic_canvas.coffee');
+    held.BasicCanvas.fromImage = require('./basic_canvas_from_image');
 
-    hydra.CanvasGrid = require('./canvas_grid.coffee');
+    held.CanvasGrid = require('./canvas_grid.coffee');
 
 
-    hydra.factory('clearBackground', function() {
+    held.factory('clearBg', function() {
         return function() {
             this.ctx.save();
             this.ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -21,7 +21,7 @@
     });
 
 
-    hydra.resizeCanvas = function() {
+    held.resizeCanvas = function() {
 
         var win_width = window.innerWidth
           , win_height = window.innerHeight
@@ -40,11 +40,11 @@
             $h.canvas.style.width = win_width + 'px';
             $h.canvas.style.height = win_height + 'px';
 
-            hydra.emit('resize', pixel_width, pixel_height);
+            held.emit('resize', pixel_width, pixel_height);
         }
     };
 
-    hydra.createMainCanvas = function(canvasContext) {
+    held.createMainCanvas = function(canvasContext) {
 
         var canvas = $h.canvas = document.createElement('canvas');
         if (navigator.isCocoonJS && canvasContext === '2d') {
@@ -53,7 +53,7 @@
 
         var ctx = $h.ctx = canvas.getContext(canvasContext);
 
-        hydra.resizeCanvas();
+        held.resizeCanvas();
         document.body.appendChild(canvas);
 
         window.addEventListener('resize', function(){
@@ -61,7 +61,7 @@
         });
     };
 
-    hydra.createStatsWidget = function() {
+    held.createStatsWidget = function() {
         if (!navigator.isCocoonJS) {  // => CocoonJS
             var stats = $h.stats = new Stats();
             stats.setMode(0);
