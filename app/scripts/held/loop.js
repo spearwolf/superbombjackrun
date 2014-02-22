@@ -27,9 +27,11 @@
         held.createMainCanvas('2d');
         held.createStatsWidget();
 
+        held.emit('init:before');
         held.emit('init');
 
         held.get('assetsManager').waitForAll().then(function(){
+            held.emit('init:after');
             held.loop.run();
         });
     };
