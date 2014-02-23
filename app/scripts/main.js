@@ -8,9 +8,8 @@
     });
 
     held.init(['assetsManager', function(assets) {
-        //assets.addImage('assets/gfx/tileset10.png', 6, 'tileset1');
-        assets.addImage('images/tileset1.png', 6, 'tileset1');
-        assets.addTileset('assets/gfx/tileset10.json', 'tileset10');
+        assets.addImage('images/tileset1.png', 'tileset1', 6);
+        assets.addTileset('assets/gfx/tileset10.json', 'tileset10', 8);
     }]);
 
     held.on('init:after', ['assetsManager', function(assets) {
@@ -27,7 +26,7 @@
 
             img.draw(ctx, (w - img.width)>>1, (h - img.height)>>1);
 
-            tileset.drawTile('stonewall', ctx, 100, 100, 200, 200);
+            tileset.drawTile('stonewall', ctx, 150, 120);
         }]);
     }]);
 

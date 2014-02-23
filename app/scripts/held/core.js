@@ -139,5 +139,4 @@
         return serviceInstances[name] = instance;
     };
 
-
 })(module.exports);

@@ -4,7 +4,7 @@
     var held = require('./core')
       , BasicCanvas = require('./basic_canvas.coffee')
       , canvasUtils = require('./canvas_utils.js')
-      , tileset = require('./tileset.js')
+      , tilesetUtils = require('./tileset_utils.js')
       ;
 
     function AssetManagerException(message) {
@@ -20,17 +20,34 @@
             tileset: {}
         };
 
-        assets.addImage = function(path, pixelZoom, name) {
-            var _name = name || path;
-            if (assets.image[_name]) {
-                throw new AssetManagerException('image already exists! name=' + _name);
+        function readArguments(path, name, pixelZoom) {
+            var args = { path: path };
+            if (typeof arguments[1] === 'number') {
+                args.name = path;
+                args.pixelZoom = name;
+            } else if (typeof arguments[1] === 'string') {
+                args.name = name;
+                args.pixelZoom = pixelZoom || 1;
             }
-            assets.image[_name] = {
-                promise: BasicCanvas.fromImage(path, pixelZoom)
-            };
-            assets.image[_name].promise.then(function(basicCanvas) {
-                assets.image[_name] = canvasUtils.extend(basicCanvas);
-                console.log('AssetManager', 'image loaded, name=', _name, 'path=', path, 'data=', basicCanvas);
+            return args;
+        }
+
+        assets.addImage = function(path, name, pixelZoom) {
+            var args = readArguments(path, name, pixelZoom);
+
+            if (assets.image[args.name]) {
+                throw new AssetManagerException('image already exists! name=' + args.name);
+            }
+
+            var fetchImage = BasicCanvas.fromImage(args.path, args.pixelZoom)
+              , promiseName = 'image:' + args.name
+              ;
+            assets.promise[promiseName] = fetchImage;
+
+            fetchImage.then(function(basicCanvas) {
+                assets.image[args.name] = canvasUtils.extend(basicCanvas);
+                console.log('AssetManager', 'image loaded, name=', args.name, 'path=', args.path, 'data=', basicCanvas);
+                delete assets.promise[promiseName];
             });
         };
 
@@ -42,29 +59,38 @@
             return '';
         }
 
-        assets.addTileset = function(path, name) {
-            var _name = name || path;
-            if (assets.tileset[_name]) {
-                throw new AssetManagerException('tileset already exists! name=' + _name);
+        assets.addTileset = function(path, name, pixelZoom) {
+            var args = readArguments(path, name, pixelZoom);
+
+            if (assets.tileset[args.name]) {
+                throw new AssetManagerException('tileset already exists! name=' + args.name);
             }
-            var fetchJson = held.get('http').getJson(path);
-            assets.promise['tileset:'+_name] = fetchJson;
-            var fetchImage = Q.defer();
-            assets.promise['image:'+_name] = fetchImage.promise;
-            //console.log('AssetManager', 'loading tileset', path);
-            fetchJson.then(function(json){
+
+            var fetchTilesetJson = held.get('http').getJson(args.path)
+              , promiseTilesetName = 'tileset:' + args.name
+              , promiseImageName = 'image:' + args.name
+              , fetchImage = Q.defer()
+              ;
+
+            assets.promise[promiseTilesetName] = fetchTilesetJson;
+            assets.promise[promiseImageName] = fetchImage.promise;
+
+            fetchTilesetJson.then(function(json){
                 console.log('AssetManager', 'tileset json', json);
-                var imagePath = dirname(path) + json.meta.image;
+                var imagePath = dirname(args.path) + json.meta.image;
                 console.log('AssetManager', 'tileset image', imagePath);
-                BasicCanvas.fromImage(imagePath).then(function(basicCanvas) {
+                BasicCanvas.fromImage(imagePath, args.pixelZoom).then(function(basicCanvas) {
                     assets.image[json.meta.image] = canvasUtils.extend(basicCanvas);
-                    assets.tileset[_name] = tileset.extend({
+                    assets.tileset[args.name] = tilesetUtils.extend({
                         config: json,
                         image: basicCanvas
                     });
-                    console.log('AssetManager', 'tileset loaded', assets.tileset[_name]);
+                    tilesetUtils.setPixelZoom(json, args.pixelZoom);
+                    console.log('AssetManager', 'tileset loaded', assets.tileset[args.name]);
                     fetchImage.resolve();
+                    delete assets.promise[promiseImageName];
                 });
+                delete assets.promise[promiseTilesetName];
             });
         };
 
