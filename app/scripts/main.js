@@ -9,7 +9,7 @@
 
     held.init(['assetsManager', function(assets) {
         assets.addImage('images/tileset1.png', 'tileset1', 6);
-        assets.addTileset('assets/gfx/tileset10.json', 'tileset10', 8);
+        assets.addTileset('assets/gfx/tileset10.json', 'tileset10', 6);
     }]);
 
     held.on('init:after', ['assetsManager', function(assets) {
@@ -29,11 +29,7 @@
                             ])
                         .createCanvasGrid();
 
-        var mapView = held.AsciiTilemap.createViewport(tilemap)
-                            .setTargetCanvas(this, 200, 200, 320, 240)
-                            .setViewportSize(320, 240)
-                            .setViewPosition(8000, 9000);
-
+        var mapView = held.AsciiTilemap.createViewport(tilemap);
 
         console.log('tileset10 ground', tileset.frame('ground'));
         console.log('tilemap', tilemap);
@@ -48,7 +44,7 @@
 
             //tileset.drawTile('stonewall', ctx, 100, 120);
 
-            mapView.setViewportSize(w, h).draw();
+            mapView.setTarget(this).setViewportSize(w, h).draw();
         }]);
     }]);
 

@@ -13,6 +13,8 @@ module.exports.CanvasGrid = class CanvasGrid
         @gridPixelSize = maxCanvasTileSize * @tileSize
         gridTileSizeLastX = @width - ((@gridWidth - 1) * maxCanvasTileSize)
         gridTileSizeLastY = @height - ((@gridHeight - 1) * maxCanvasTileSize)
+        @pixelWidth = @width * @tileSize
+        @pixelHeight = @height * @tileSize
 
 
         # Build canvas grid

@@ -10,40 +10,27 @@
         var api = {
             canvasGrid: canvasGrid,
             x: 0,
-            y: 0
+            y: 0,
+            target: {}
         };
 
-        api.setTargetCanvas = function(canvas, ctx, x, y, w, h) {
-            if (!api.target) {
-                api.target = {};
-            }
-
+        api.setTarget = function(canvas) {
             api.target.canvas = canvas;
-            api.target.ctx = ctx;
-            api.target.x = x;
-            api.target.y = y;
-            api.target.w = w;
-            api.target.h = h;
-
             return api;
         }
 
         api.setViewportSize = function(w, h) {
             api.w = w;
             api.h = h;
-            return api;
-        };
 
-        api.setViewPosition = function(x, y) {
-            var hw = api.target.w >> 1;
-            var hh = api.target.h >> 1;
-            api.x = range(x, hw, api.w - hw) - hw;
-            api.y = range(y, hh, api.h - hh) - hh;
+            api.target.w = (api.x + w) < api.canvasGrid.pixelWidth ? w : api.canvasGrid.pixelWidth - api.x;
+            api.target.h = (api.y + h) < api.canvasGrid.pixelHeight ? h : api.canvasGrid.pixelHeight - api.y;
+
             return api;
         };
 
         api.draw = function() {
-            api.canvasGrid.renderTo(api.target.canvas, api.x, api.y, api.w, api.h);
+            api.canvasGrid.renderTo(api.target.canvas, api.x, api.y, api.target.w, api.target.h);
         };
 
         return api;
