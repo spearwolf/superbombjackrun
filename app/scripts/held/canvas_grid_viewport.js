@@ -1,7 +1,7 @@
 (function(root){
     "use strict";
 
-    function _range(x, xMin, xMax) {
+    function range(x, xMin, xMax) {
         return x < xMin ? xMin : (x > xMax ? xMax : x);
     }
 
@@ -13,27 +13,38 @@
             y: 0
         };
 
-        api.setTarget = function(canvas, x, y, w, h) {
-            api.target = {
-                canvas: canvas,
-                x: x,
-                y: y,
-                w: w,
-                h: h
-            };
+        api.setTargetCanvas = function(canvas, ctx, x, y, w, h) {
+            if (!api.target) {
+                api.target = {};
+            }
+
+            api.target.canvas = canvas;
+            api.target.ctx = ctx;
+            api.target.x = x;
+            api.target.y = y;
+            api.target.w = w;
+            api.target.h = h;
+
             return api;
         }
 
         api.setViewportSize = function(w, h) {
-            api.width = w;
-            api.height = h;
-            //api.zoom = 1;
+            api.w = w;
+            api.h = h;
+            return api;
         };
 
-        //api.setPosition = function(x, y) {
-            //var w = api.width - ;
-            //api.x = _range1(x, w, 0, w);
-        //};
+        api.setViewPosition = function(x, y) {
+            var hw = api.target.w >> 1;
+            var hh = api.target.h >> 1;
+            api.x = range(x, hw, api.w - hw) - hw;
+            api.y = range(y, hh, api.h - hh) - hh;
+            return api;
+        };
+
+        api.draw = function() {
+            api.canvasGrid.renderTo(api.target.canvas, api.x, api.y, api.w, api.h);
+        };
 
         return api;
     };

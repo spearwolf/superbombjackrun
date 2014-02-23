@@ -10,6 +10,10 @@
                 return this.config.frames[key].frame;
             };
 
+            tileset.getFirstFrame = function() {
+                return tileset.frame(Object.keys(this.config.frames)[0]);
+            };
+
             tileset.drawTile = function(key, ctxTarget, x, y, w, h) {
                 var frame = tileset.frame(key);
                 ctxTarget.drawImage(this.image.canvas, frame.x, frame.y, frame.w, frame.h, x, y, w||frame.w, h||frame.h);

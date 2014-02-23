@@ -1,15 +1,25 @@
 (function(){
     "use strict";
 
-    module.exports = require('./held/core');
+    var held = module.exports = require('./held/core');
 
     require('./held/canvas');
     require('./held/loop');
     require('./held/assets_manager');
 
+    held.AsciiTilemap = require('./held/ascii_tilemap');
+
+
+    var createViewport = require('./held/canvas_grid_viewport').createViewport
+
+    held.AsciiTilemap.createViewport = function(asciiTilemap) {
+        return createViewport(asciiTilemap.canvasGrid);
+    };
+
+
     // shortcuts
-    module.exports.init = function() { return module.exports.on('init', arguments[0]); };
-    module.exports.resize = function() { return module.exports.on('resize', arguments[0]); };
-    module.exports.idle = function() { return module.exports.on('idle', arguments[0]); };
+    held.init = function() { return held.on('init', arguments[0]); };
+    held.resize = function() { return held.on('resize', arguments[0]); };
+    held.idle = function() { return held.on('idle', arguments[0]); };
 
 })();
