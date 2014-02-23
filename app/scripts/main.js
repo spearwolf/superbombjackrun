@@ -38,7 +38,7 @@
 
         held.idle(['ctx', 'width', 'height', 'clearBg', function(ctx, w, h, clearBg) {
 
-            //clearBg();
+            clearBg();
 
             //img.draw(ctx, (w - img.width)>>1, (h - img.height)>>1);
 
