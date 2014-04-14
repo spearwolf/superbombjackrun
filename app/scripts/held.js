@@ -6,6 +6,8 @@
     require('./held/canvas');
     require('./held/loop');
     require('./held/assets_manager');
+    require('./held/clear_bg');
+    require('./held/draw_view');
 
     held.AsciiTilemap = require('./held/ascii_tilemap');
 
