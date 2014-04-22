@@ -70,16 +70,16 @@ obj._included  //  => ["foo", "bar"]
  * ===============
  */
 
-papa.App(function(app) {                    // create an anonymous app
-                                            // => app is your app instance
-    console.log('hello from', app.name);    // every app has a name!
+papa.App(function(app) {                        // create an anonymous app
+                                                // => app is your app instance
+    console.log('hello from', app.papa.name);   // every app has a name!
 });
 
-papa.App("foo.bar.app", function(app) {     // create app with name
-    console.log('hello from', app.name);    // => "hello from foo.bar.app"
+papa.App("foo.bar.app", function(app) {         // create app with name
+    console.log('hello from', app.papa.name);   // => "hello from foo.bar.app"
 });
 
-var myApp = papa.App.Get('foo.bar.app')     // => return app object for our "foo.bar.app" app
+var myApp = papa.App.Get('foo.bar.app')         // => return app object for our "foo.bar.app" app
 
 
 // App Events Example
@@ -88,7 +88,7 @@ var myApp = papa.App.Get('foo.bar.app')     // => return app object for our "foo
 var myApp = papa.App("my.app", function(app) {
 
     app.on('setup', function() {
-        console.log('setup from', app.name);
+        console.log('setup from', this.papa.name);   // this === app <- inside on callback
     });
 
 });
