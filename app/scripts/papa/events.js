@@ -42,10 +42,14 @@
 			};
 
 			api.emit = function(eventName /* arguments.. */) {
+				var instance = api;
+				if (api.papa && typeof api.papa.GetInstance === 'function') {
+					instance = api.papa.GetInstance();
+				}
 				var args = Array.prototype.slice.call(arguments, 1);
 				if (eventName in callbacks) {
 					callbacks[eventName].forEach(function(cb){
-						api.apply(cb.fn, args);
+						cb.fn.apply(instance, args);
 					});
 				}
 			};

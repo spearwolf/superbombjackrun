@@ -16,8 +16,11 @@
 						"events"
 					],
 					{
-						name: name
-				   	}));
+						papa: {
+							name: name,
+							GetInstance: function() { return papa.App.Get(name); }
+						}
+					}));
 		}
 
 		var api = function(name, callback) {

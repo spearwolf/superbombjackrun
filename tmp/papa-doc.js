@@ -58,6 +58,12 @@ obj2.name = "fufu";                                             //   object like
 papa.Factory.Include(["foo", "bar", "plah.foo"], {})            // Include() and Create() both support
                                                                 //   arrays
 
+// ### TODO
+// - Factory Alias
+papa.Factory('my.alias', ["foo", "bar", "plah"]);
+// - store which extensions included
+obj._included  //  => ["foo", "bar"]
+
 
 /* ===============
  * App API
