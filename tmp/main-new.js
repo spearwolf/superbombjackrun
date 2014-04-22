@@ -1,10 +1,10 @@
 (function(){
     "use strict";
 
-    var held = require('./held');
+    var papa = require('./papa');
 
 
-    held.app(function(app) {
+    papa.App(function(app) {
 
         var mapView;
 

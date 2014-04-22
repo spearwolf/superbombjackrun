@@ -1,8 +1,9 @@
 (function(){
     "use strict";
 
+	//====OLD========================================================= {{{
+	//
     var held = window.held = require('./held');
-    window.papa = require('./papa');
 
     held.resize(function(w, h) {
         console.log('canvas size => ['+w+'x'+h+']');
@@ -51,4 +52,11 @@
     }]);
 
     held.start();
+	//
+	//==================================================================================== }}}
+
+
+    var papa = window.papa = require('./papa');
+
+
 })();

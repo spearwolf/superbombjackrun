@@ -12,7 +12,12 @@
 		}
 
 		function createAppSkeleton(name) {
-			return Object.create({ name: name });
+			return Object.create(papa.Factory.Include([
+						"events"
+					],
+					{
+						name: name
+				   	}));
 		}
 
 		var api = function(name, callback) {
@@ -26,6 +31,8 @@
 			apps[name] = app;
 
 			callback(app);
+
+			return app;
 		};
 
 		api.Get = function(name) {
