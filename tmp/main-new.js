@@ -8,9 +8,29 @@
 
         var mapView;
 
-        app.on('setup', function() {
-            app.assets.addTileset('assets/gfx/tileset10.json', 'tileset10', 6);
+        //app.assets.tileset('assets/gfx/tileset10.json', 'tileset10', 6);
+
+        app.assets({
+			tileset10: {
+				type: 'tileset',
+				path: 'assets/gfx/tileset10.json',
+				pixelZoom: 6
+			}
         });
+
+        app.assets({
+			tileset: {
+				tileset10: {
+					type: 'tileset',
+					path: 'assets/gfx/tileset10.json',
+					pixelZoom: 6
+				}
+			}
+        });
+
+        //app.on('setup', function() {
+            //app.assets.addTileset('assets/gfx/tileset10.json', 'tileset10', 6);
+        //});
 
         app.on('assetsLoaded', function() {
 

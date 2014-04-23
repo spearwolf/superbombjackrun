@@ -2,6 +2,7 @@
 
 	var papa = require('./papa');
     require('./factory');
+    require('./app_state_machine.coffee');
 
 	papa.Module('App', function() {
 
@@ -13,7 +14,10 @@
 		}
 
 		function createAppSkeleton(name) {
-			var app = papa.Factory.Create("events", true);
+			var app = papa.Factory.Create([
+					"events",
+					"app_state_machine"
+				], true);
 			app.papa.name = name;
 			return app;
 		}

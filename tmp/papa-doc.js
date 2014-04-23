@@ -7,7 +7,7 @@ var papa = require('./papa');                           // import library
 
 papa.Module("foo.bar", function() {                     // create new module
     return {                                            //
-        hello: function() { return "hello"; }           // => papa.foo.bar.hello
+        hello: function() { return "hello"; }           // => papa.foo.bar.hello
     };
 });
 
