@@ -4,9 +4,9 @@
 
 	papa.Factory('events', function() {
 
-		var callbacks = { _id: 0 };
-
 		return function(api, self) {
+
+			var callbacks = { _id: 0 };
 
 			api.on = function(eventName, prio, fn) {
 
