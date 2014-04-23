@@ -12,30 +12,43 @@
 			factories[objectTypeName].push(callback());
 		};
 
-		function _extend(objectTypeName, instance) {
-			var objInstance = instance;
-			if (instance.papa && instance.papa.instance) {
-				objInstance = instance.papa.instance;
-			}
+		function _extend(objectTypeName, apiInstance) {
 			var api;
+			var instance = apiInstance;
+			if (apiInstance.papa && apiInstance.papa.instance) {
+				instance = apiInstance.papa.instance;
+			}
+
 			var _factories = factories[objectTypeName];
 			if (Array.isArray(_factories) && _factories.length > 0) {
+
+				if (!apiInstance.papa) {
+					apiInstance.papa = {};
+				}
+				if (!apiInstance.papa.mixins) {
+					apiInstance.papa.mixins = [objectTypeName];
+				} else {
+					if (apiInstance.papa.mixins.indexOf(objectTypeName) > -1) {
+						return;
+					}
+					apiInstance.papa.mixins.push(objectTypeName);
+				}
+
 				_factories.forEach(function(factory) {
 					if (typeof factory === 'function') {
-						factory(instance, objInstance);
+						factory(apiInstance, instance);
 					} else if (typeof factory === 'object') {
 						if (typeof factory.extend === 'function') {
 							if (typeof factory.namespace === 'string') {
-								api = papa.Module.CreateObjPath(factory.namespace, instance);
-								factory.extend(api, objInstance);
+								api = papa.Module.CreateObjPath(factory.namespace, apiInstance);
+								factory.extend(api, instance);
 							} else {
-								factory.extend(instance, objInstance);
+								factory.extend(apiInstance, instance);
 							}
 						}
 					}
 				});
 			}
-			return instance;
 		}
 
 		api.Include = function(objectTypeName, instance) {

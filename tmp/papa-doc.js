@@ -27,8 +27,8 @@ papa.Module("foo", function(api) {                      // create new or append 
 // Step 1) Create Factory
 
 papa.Factory('a.person', function() {                               // factory as function
-    return function(instance) {                                     //
-        instance.getPersonType = function() { return "personA"; };  // => <instance>.getPersonType()
+    return function(api) {                                          //
+        api.getPersonType = function() { return "personA"; };       // => <object>.getPersonType()
     };
 });
 
@@ -36,9 +36,8 @@ papa.Factory('b.person', function() {                           // factory as ob
     return {                                                    //
         namespace: "pers.on",                                   // => namespace is optional
                                                                 //
-        extend: function(api, instance) {                       // if no namespace specified:
-                                                                //          use function(instance)
-            api.getType = function() { return "personB"; };     // => <instance>.pers.on.getType()
+        extend: function(api, self) {                           //
+            api.getName = function() { return self.name; };     // => <object>.pers.on.getName()
         }
     };
 });
@@ -50,7 +49,7 @@ obj.name                                                        // => "fufu"
 obj.getPersonType()                                             // => "personA"
 
 obj.Factory.Include("b.person", obj);                           // include another mixin
-obj.pers.on.getType()                                           // => "personB"
+obj.pers.on.getName()                                           // => "fufu"
 
 var obj2 = papa.Factory.Create(["a.person", "b.person"])        // different way to create a
 obj2.name = "fufu";                                             //   object like above
@@ -59,10 +58,12 @@ papa.Factory.Include(["foo", "bar", "plah.foo"], {})            // Include() and
                                                                 //   arrays
 
 // ### TODO
+// - explain papa.Factor.Create(.., true)
 // - Factory Alias
 papa.Factory('my.alias', ["foo", "bar", "plah"]);
-// - store which extensions included
-obj.papa.included  //  => ["foo", "bar"]
+// ### DONE
+// - store which mixins included
+obj.papa.mixins  //  => ["foo", "bar"]
 
 
 /* ===============
@@ -71,7 +72,7 @@ obj.papa.included  //  => ["foo", "bar"]
  */
 
 papa.App(function(app) {                        // create an anonymous app
-                                                // => app is your app instance
+                                                // => app is your app scope
     console.log('hello from', app.papa.name);   // every app has a name!
 });
 
@@ -79,7 +80,7 @@ papa.App("foo.bar.app", function(app) {         // create app with name
     console.log('hello from', app.papa.name);   // => "hello from foo.bar.app"
 });
 
-var myApp = papa.App.Get('foo.bar.app')         // => return app object for our "foo.bar.app" app
+var myApp = papa.App('foo.bar.app')             // => return app object from app:"foo.bar.app"
 
 
 // App Events Example
@@ -88,11 +89,12 @@ var myApp = papa.App.Get('foo.bar.app')         // => return app object for our 
 var myApp = papa.App("my.app", function(app) {
 
     app.on('setup', function() {
+        console.log('setup from', app.papa.name);    // => "setup from my.app"
         console.log('setup from', this.papa.name);   // this === app <- inside on callback
     });
 
 });
 
-myApp.emit('setup');                        // => "setup from my.app"
+myApp.emit('setup');  // guess?
 
 
