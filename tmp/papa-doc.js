@@ -62,7 +62,7 @@ papa.Factory.Include(["foo", "bar", "plah.foo"], {})            // Include() and
 // - Factory Alias
 papa.Factory('my.alias', ["foo", "bar", "plah"]);
 // - store which extensions included
-obj._included  //  => ["foo", "bar"]
+obj.papa.included  //  => ["foo", "bar"]
 
 
 /* ===============

@@ -1,5 +1,4 @@
 (function(){
-
 	var papa = require('./papa');
 
 	papa.Module('Factory', function() {
@@ -14,19 +13,23 @@
 		};
 
 		function _extend(objectTypeName, instance) {
+			var objInstance = instance;
+			if (instance.papa && instance.papa.instance) {
+				objInstance = instance.papa.instance;
+			}
 			var api;
 			var _factories = factories[objectTypeName];
 			if (Array.isArray(_factories) && _factories.length > 0) {
 				_factories.forEach(function(factory) {
 					if (typeof factory === 'function') {
-						factory(instance);
+						factory(instance, objInstance);
 					} else if (typeof factory === 'object') {
 						if (typeof factory.extend === 'function') {
 							if (typeof factory.namespace === 'string') {
-								api = papa.CreateModulePath(factory.namespace, instance);
-								factory.extend(api, instance);
+								api = papa.Module.CreateObjPath(factory.namespace, instance);
+								factory.extend(api, objInstance);
 							} else {
-								factory.extend(instance);
+								factory.extend(instance, objInstance);
 							}
 						}
 					}
@@ -46,8 +49,17 @@
 			return instance;
 		};
 
-		api.Create = function(objectTypeName) {
-			return api.Extend(objectTypeName, {});
+		api.Create = function(objectTypeName, newScopeInheritance) {
+			if (newScopeInheritance) {
+				var apiInstance = { papa: {} };
+				var instance = Object.create(apiInstance);
+				apiInstance.papa.instance = instance;
+				apiInstance.papa.apiInstance = apiInstance;
+				api.Include(objectTypeName, apiInstance);
+				return instance;
+			} else {
+				return api.Include(objectTypeName, {});
+			}
 		};
 
 		return api;

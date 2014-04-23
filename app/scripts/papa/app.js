@@ -1,6 +1,7 @@
 (function(){
 
 	var papa = require('./papa');
+    require('./factory');
 
 	papa.Module('App', function() {
 
@@ -12,22 +13,20 @@
 		}
 
 		function createAppSkeleton(name) {
-			return Object.create(papa.Factory.Include([
-						"events"
-					],
-					{
-						papa: {
-							name: name,
-							GetInstance: function() { return papa.App.Get(name); }
-						}
-					}));
+			var app = papa.Factory.Create("events", true);
+			app.papa.name = name;
+			return app;
 		}
 
 		var api = function(name, callback) {
 
 			if (arguments.length === 1) {
-				callback = name;
-				name = generateAppName();
+				if (typeof arguments[0] === 'string') {
+					return apps[name];
+				} else {
+					callback = name;
+					name = generateAppName();
+				}
 			}
 
 			var app = createAppSkeleton(name);
@@ -36,10 +35,6 @@
 			callback(app);
 
 			return app;
-		};
-
-		api.Get = function(name) {
-			return apps[name];
 		};
 
 		return api;

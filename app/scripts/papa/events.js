@@ -1,11 +1,12 @@
 (function(){
 	var papa = require('./papa');
+    require('./factory');
 
 	papa.Factory('events', function() {
 
 		var callbacks = { _id: 0 };
 
-		return function(api) {
+		return function(api, self) {
 
 			api.on = function(eventName, prio, fn) {
 
@@ -42,14 +43,10 @@
 			};
 
 			api.emit = function(eventName /* arguments.. */) {
-				var instance = api;
-				if (api.papa && typeof api.papa.GetInstance === 'function') {
-					instance = api.papa.GetInstance();
-				}
 				var args = Array.prototype.slice.call(arguments, 1);
 				if (eventName in callbacks) {
 					callbacks[eventName].forEach(function(cb){
-						cb.fn.apply(instance, args);
+						cb.fn.apply(self, args);
 					});
 				}
 			};
