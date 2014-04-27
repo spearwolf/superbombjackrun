@@ -6,9 +6,9 @@ require './events'
 papa.Factory "app_state_machine", ->
 
 	namespace: 'state'
-	initialize: (exports, self) ->
+	dependsOn: 'events'
 
-		papa.Factory.Include "events", self  # TODO depends option for Factory def
+	initialize: (exports, self) ->
 
 		state_machine "state", extend: exports, (state, event, transition) ->
 

@@ -13,7 +13,7 @@
 		};
 
 		function _initialize(objectTypeName, apiInstance) {
-			var api;
+			var exports;
 			var instance = apiInstance;
 			if (apiInstance.papa && apiInstance.papa.instance) {
 				instance = apiInstance.papa.instance;
@@ -38,10 +38,17 @@
 					if (typeof factory === 'function') {
 						factory(apiInstance, instance);
 					} else if (typeof factory === 'object') {
+						if (Array.isArray(factory.dependsOn)) {
+							factory.dependsOn.forEach(function(_typeName) {
+								api.Include(_typeName, apiInstance);
+							});
+						} else if (typeof factory.dependsOn === 'string') {
+							api.Include(factory.dependsOn, apiInstance);
+						}
 						if (typeof factory.initialize === 'function') {
 							if (typeof factory.namespace === 'string') {
-								api = papa.Module.CreateObjPath(factory.namespace, apiInstance);
-								factory.initialize(api, instance);
+								exports = papa.Module.CreateObjPath(factory.namespace, apiInstance);
+								factory.initialize(exports, instance);
 							} else {
 								factory.initialize(apiInstance, instance);
 							}

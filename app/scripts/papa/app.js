@@ -15,7 +15,7 @@
 
 		function createAppSkeleton(name) {
 			var app = papa.Factory.Create([
-					"events",
+					//"events",
 					"app_state_machine"
 				], true);
 			app.papa.name = name;
