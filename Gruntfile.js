@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
 
-        clean: ["public/js/app.min.js", "public/css/app.css", "public/index.html", ".tmp"],
+        clean: ["public/js/app.min.js", "public/js/papa.min.js", "public/css/app.css", "public/index.html", "public/papa.html", ".tmp"],
 
         texturepacker: {
             dist: {
@@ -25,11 +25,19 @@ module.exports = function(grunt) {
         },
 
         browserify: {
-            dist: {
+            app: {
                 src: [ 'app/scripts/**/*.js', 'app/scripts/**/*.coffee' ],
                 dest: '.tmp/scripts/app.js',
                 options: {
                     transform: ['coffeeify']
+                }
+            },
+            papa: {
+                src: 'app/scripts/papa.js',
+                dest: '.tmp/scripts/papa.js',
+                options: {
+                    transform: ['coffeeify'],
+                    standalone: "papa"
                 }
             }
         },
@@ -37,9 +45,14 @@ module.exports = function(grunt) {
         uglify: {
             options: {
             },
-            dist: {
+            app: {
                 files: {
                     'public/js/app.min.js': ['app/vendor/scripts/*.js', '.tmp/scripts/app.js']
+                }
+            },
+            papa: {
+                files: {
+                    'public/js/papa.min.js': ['.tmp/scripts/papa.js']
                 }
             }
         },
@@ -81,7 +94,8 @@ module.exports = function(grunt) {
                     }
                 },
                 files: {
-                    "public/index.html": ["app/views/index.jade"]
+                    "public/index.html": ["app/views/index.jade"],
+                    "public/papa.html": ["app/views/papa.jade"]
                 }
             }
         },
@@ -98,6 +112,8 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['texturepacker', 'browserify', 'uglify', 'less', 'jade']);
     grunt.registerTask('serve', ['connect', 'watch']);
     grunt.registerTask('publish', ['build', 'gh-pages']);
+
+    grunt.registerTask('papa', ['browserify:papa', 'uglify:papa']);
 
     grunt.registerTask('default', ['build', 'serve']);
 };
