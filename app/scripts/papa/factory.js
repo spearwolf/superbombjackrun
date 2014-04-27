@@ -12,7 +12,7 @@
 			factories[objectTypeName].push(callback());
 		};
 
-		function _extend(objectTypeName, apiInstance) {
+		function _initialize(objectTypeName, apiInstance) {
 			var api;
 			var instance = apiInstance;
 			if (apiInstance.papa && apiInstance.papa.instance) {
@@ -38,12 +38,12 @@
 					if (typeof factory === 'function') {
 						factory(apiInstance, instance);
 					} else if (typeof factory === 'object') {
-						if (typeof factory.extend === 'function') {
+						if (typeof factory.initialize === 'function') {
 							if (typeof factory.namespace === 'string') {
 								api = papa.Module.CreateObjPath(factory.namespace, apiInstance);
-								factory.extend(api, instance);
+								factory.initialize(api, instance);
 							} else {
-								factory.extend(apiInstance, instance);
+								factory.initialize(apiInstance, instance);
 							}
 						}
 					}
@@ -54,10 +54,10 @@
 		api.Include = function(objectTypeName, instance) {
 			if (Array.isArray(objectTypeName)) {
 				objectTypeName.forEach(function(typeName) {
-					_extend(typeName, instance);
+					_initialize(typeName, instance);
 				});
 			} else {
-				_extend(objectTypeName, instance);
+				_initialize(objectTypeName, instance);
 			}
 			return instance;
 		};

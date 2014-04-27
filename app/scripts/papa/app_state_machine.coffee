@@ -6,7 +6,7 @@ require './events'
 papa.Factory "app_state_machine", ->
 
 	namespace: 'state'
-	extend: (exports, self) ->
+	initialize: (exports, self) ->
 
 		papa.Factory.Include "events", self  # TODO depends option for Factory def
 
@@ -22,8 +22,10 @@ papa.Factory "app_state_machine", ->
 			state "paused", parent: "ready"
 
 
-			event "init", ->
+			event "start", ->
 				transition.from "created", to: "setup", -> self.emit "setup"
+				transition.from ["postInit"], to: "running", ->
+					self.emit "started"
 
 			event "loadAssets", ->
 				transition.from "setup", to: "loading"  # TODO load assets
@@ -32,9 +34,4 @@ papa.Factory "app_state_machine", ->
 				transition.from "loading", to: "postInit", ->
 					self.emit "assetsLoaded"
 					exports.start()
-
-			event "start", ->
-				transition.from ["start", "postInit"], to: "running", ->
-					self.emit "started"
-
 
