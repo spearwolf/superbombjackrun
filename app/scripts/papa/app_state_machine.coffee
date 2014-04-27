@@ -24,7 +24,7 @@ papa.Factory "app_state_machine", ->
 
 			event "start", ->
 				transition.from "created", to: "setup", -> self.emit "setup"
-				transition.from ["postInit"], to: "running", ->
+				transition.from "postInit", to: "running", ->
 					self.emit "started"
 
 			event "loadAssets", ->
